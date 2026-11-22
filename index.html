@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>masakiyui</title>
+<style>
+  :root{
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",Arial,sans-serif;
+    --script:"Snell Roundhand","Apple Chancery","Bradley Hand","Segoe Script",cursive;
+    --mono:"SF Mono",ui-monospace,Menlo,Consolas,monospace;
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0a0b; --card:#131315; --ink:#eceae5; --muted:#8b8781;
+    --line:rgba(255,255,255,.07); --accent:#bf483b; --accent2:#e2705f;
+    --glow:rgba(191,72,59,.20); --shadow:rgba(0,0,0,.45); --track:#2a2a2e;
+  }
+  :root[data-theme="light"]{
+    --bg:#f8f6f3; --card:#ffffff; --ink:#191817; --muted:#6d6963;
+    --line:rgba(0,0,0,.08); --accent:#a63a2e; --accent2:#8f2f25;
+    --glow:rgba(166,58,46,.12); --shadow:rgba(0,0,0,.12); --track:#e8e3da;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .3s cubic-bezier(.2,0,0,1),color .3s cubic-bezier(.2,0,0,1)}
+  .page{max-width:920px;margin:0 auto;padding:64px 24px 130px}
+  .hero{margin-bottom:38px}
+  .hero-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px;gap:16px}
+  .eyebrow{font:11px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .gh{font:12px/1 var(--mono);color:var(--muted);text-decoration:none;letter-spacing:.03em;white-space:nowrap}
+  .gh:hover{color:var(--accent2)}
+  h1{font-family:var(--serif);font-size:clamp(38px,6.4vw,58px);font-weight:400;
+    letter-spacing:-.022em;line-height:1;margin:0 0 14px}
+  .lede{max-width:56ch;color:var(--muted);font-size:14.5px;line-height:1.8;margin:0}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;
+    padding:32px;margin-bottom:18px;position:relative;overflow:hidden;
+    transition:background-color .3s cubic-bezier(.2,0,0,1),border-color .3s cubic-bezier(.2,0,0,1)}
+  .label{display:flex;gap:10px;align-items:baseline;font:11px/1 var(--mono);
+    letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
+  .label span:first-child{color:var(--accent)}
+
+  .org-grid{display:grid;grid-template-columns:1fr 292px;gap:34px;align-items:center}
+  .wordmark{font-family:var(--script);font-size:clamp(42px,6.4vw,74px);line-height:1.1;
+    color:var(--ink);margin:0 0 2px;padding:0 0 0 9px}
+  .phon{font:12px/1 var(--mono);color:var(--muted);letter-spacing:.05em;margin:18px 0 20px}
+  .phon .dim{opacity:.55}
+  .org-def{font-size:15px;line-height:1.8;margin:0 0 12px}
+  .org-ext{font-size:13.5px;line-height:1.8;color:var(--muted);margin:0 0 22px}
+  .org-link{font:12px/1 var(--mono);color:var(--accent2);text-decoration:none;
+    letter-spacing:.03em;border-bottom:1px solid currentColor;padding-bottom:4px}
+  .flower{margin:0;position:relative;display:flex;flex-direction:column;align-items:center}
+  .flower::before{content:"";position:absolute;inset:-34px;pointer-events:none;
+    background:radial-gradient(circle at 50% 46%,var(--glow),transparent 68%)}
+  .flower img{position:relative;width:100%;max-width:252px;height:auto;
+    filter:drop-shadow(0 20px 44px var(--shadow))}
+  .flower figcaption{position:relative;margin-top:12px;font:10px/1 var(--mono);
+    letter-spacing:.16em;text-transform:uppercase;color:var(--muted);opacity:.8}
+
+  .about h2{font-family:var(--serif);font-weight:400;font-size:23px;line-height:1.45;margin:0 0 16px}
+  .about p{font-size:14.5px;line-height:1.85;margin:0 0 12px;max-width:64ch}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:22px 0 0}
+  .tags li{font:11.5px/1 var(--mono);color:var(--muted);border:1px solid var(--line);
+    border-radius:999px;padding:7px 12px;letter-spacing:.03em}
+
+  .label-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .label-row .label{margin:0}
+  .tools{display:flex;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .tools button{width:34px;height:28px;border:0;border-left:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;font-size:13px;
+    display:grid;place-items:center;font-family:var(--sans);transition:color .2s,background .2s}
+  .tools button:first-child{border-left:0}
+  .tools button:hover{color:var(--ink);background:var(--line)}
+
+  .au{border-top:1px solid var(--line);padding:16px 0 14px}
+  .au:first-of-type{border-top:0;padding-top:4px}
+  .au-head{width:100%;display:grid;grid-template-columns:1fr auto auto;gap:14px;
+    align-items:baseline;background:none;border:0;padding:0;cursor:pointer;
+    color:inherit;text-align:left;font-family:inherit}
+  .au-name{font-size:16px;letter-spacing:.005em}
+  .au-sub{font:11px/1 var(--mono);color:var(--muted);letter-spacing:.05em}
+  .au-num{font:15px/1 var(--mono);color:var(--ink);font-variant-numeric:tabular-nums;
+    min-width:64px;text-align:right;transition:color .25s;opacity:.85}
+  .au.open .au-num{color:var(--accent2);opacity:1}
+  .au-bar{height:6px;border-radius:3px;background:var(--track);margin-top:12px;overflow:hidden}
+  .au-bar i{display:block;height:100%;background:var(--accent);border-radius:3px;
+    transition:width .5s cubic-bezier(.2,0,0,1)}
+  .au-body{display:none;padding:14px 0 2px 16px;margin-left:2px;border-left:1px solid var(--line)}
+  .au.open .au-body{display:block}
+  .wk{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:3.5px 0}
+  .wk-t{font-size:12.5px;opacity:.72}
+  .wk-edit{font:12px/1 var(--mono);color:var(--muted);display:flex;align-items:baseline;flex:none}
+  .wk-in{width:50px;text-align:right;background:none;border:0;border-bottom:1px dashed var(--line);
+    color:var(--muted);font:inherit;padding:2px 1px;font-variant-numeric:tabular-nums}
+  .wk-in:focus{outline:none;border-bottom-color:var(--accent);color:var(--ink)}
+  .wk-g{font:10px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    opacity:.6;margin:12px 0 1px;padding-top:9px;border-top:1px solid var(--line)}
+  .wk-g:first-child{border-top:0;margin-top:0;padding-top:0}
+  @media(min-width:820px){
+    .au-body.wide{column-count:3;column-gap:34px}
+    .au-body.wide .grp{break-inside:avoid;margin-bottom:8px}
+  }
+  .hint{font:11px/1.7 var(--mono);color:var(--muted);opacity:.72;margin:20px 0 0;max-width:52ch}
+
+  .foot{margin-top:34px;font:11px/1.7 var(--mono);color:var(--muted);opacity:.7;
+    display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  .dock{position:fixed;right:22px;bottom:22px;z-index:50;display:flex;align-items:center;gap:10px}
+  .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:999px;
+    padding:3px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  .seg button{border:0;background:none;color:var(--muted);font:11.5px/1 var(--mono);
+    padding:7px 11px;border-radius:999px;cursor:pointer;letter-spacing:.06em;transition:.2s}
+  .seg button.on{background:var(--accent);color:#fff}
+
+  /* 昼夜开关组件 */
+  .ts{--toggle-size:14px;--container-width:5.625em;--container-height:2.5em;--container-radius:6.25em;
+    --container-light-bg:#d8d5ce;--container-night-bg:#161618;--circle-container-diameter:3.375em;
+    --sun-moon-diameter:2.125em;--sun-bg:linear-gradient(135deg,#fb7299,#ff9f5a);--sun-edge:#d9506f;
+    --moon-bg:#ececee;--moon-edge:#a9aab0;--spot-color:#c4c5cb;
+    --circle-container-offset:calc((var(--circle-container-diameter) - var(--container-height)) / 2 * -1);
+    --stars-color:#f5f4f1;--clouds-color:#ffffff;--back-clouds-color:#ebe9e4;
+    --ts-rim:rgb(255 255 255 / .94);--transition:.3s cubic-bezier(.2,0,0,1);
+    --circle-transition:.2s cubic-bezier(.2,0,0,1);
+    flex:none;display:block;padding:0;border:0;background:none;border-radius:var(--container-radius);
+    cursor:pointer;font-size:var(--toggle-size)}
+  [data-theme="dark"] .ts{--ts-rim:rgb(255 255 255 / .1)}
+  .ts,.ts *,.ts *::before,.ts *::after{box-sizing:border-box;margin:0;padding:0;font-size:var(--toggle-size)}
+  .ts>.ts-c{display:block;position:relative;width:var(--container-width);height:var(--container-height);
+    border-radius:var(--container-radius);overflow:hidden;background-color:var(--container-light-bg);
+    box-shadow:0 -0.062em 0.062em rgb(0 0 0 / .25),0 0.062em 0.125em var(--ts-rim);
+    transition:background-color var(--transition),box-shadow var(--transition)}
+  .ts-c::before{content:"";position:absolute;z-index:1;inset:0;border-radius:var(--container-radius);
+    box-shadow:0 0.05em 0.187em rgb(0 0 0 / .25) inset,0 0.05em 0.187em rgb(0 0 0 / .25) inset}
+  .ts-circle{position:absolute;display:flex;width:var(--circle-container-diameter);
+    height:var(--circle-container-diameter);left:var(--circle-container-offset);top:var(--circle-container-offset);
+    border-radius:var(--container-radius);background-color:rgb(255 255 255 / .1);
+    box-shadow:inset 0 0 0 3.375em rgb(255 255 255 / .1),inset 0 0 0 3.375em rgb(255 255 255 / .1),
+      0 0 0 0.625em rgb(255 255 255 / .1),0 0 0 1.25em rgb(255 255 255 / .1);
+    transform:translateX(0);transition:transform var(--circle-transition);pointer-events:none}
+  .ts-sm{position:relative;z-index:2;display:block;width:var(--sun-moon-diameter);height:var(--sun-moon-diameter);
+    margin:auto;border-radius:var(--container-radius);overflow:hidden;pointer-events:auto;background:var(--sun-bg);
+    box-shadow:0.062em 0.062em 0.062em 0 rgb(254 255 239 / .61) inset,0 -0.062em 0.062em 0 var(--sun-edge) inset;
+    filter:drop-shadow(0.062em 0.125em 0.125em rgb(0 0 0 / .25)) drop-shadow(0 0.062em 0.125em rgb(0 0 0 / .25));
+    transition:transform var(--transition)}
+  .ts-moon{position:relative;display:block;width:100%;height:100%;border-radius:inherit;
+    transform:translateX(100%);background-color:var(--moon-bg);
+    box-shadow:0.062em 0.062em 0.062em 0 rgb(254 255 239 / .61) inset,0 -0.062em 0.062em 0 var(--moon-edge) inset;
+    transition:transform var(--transition)}
+  .ts-spot{position:absolute;top:0.75em;left:0.312em;width:0.75em;height:0.75em;border-radius:var(--container-radius);
+    background-color:var(--spot-color);box-shadow:0 0.0312em 0.062em rgb(0 0 0 / .25) inset}
+  .ts-spot:nth-of-type(2){width:0.375em;height:0.375em;top:0.937em;left:1.375em}
+  .ts-spot:nth-last-of-type(3){width:0.25em;height:0.25em;top:0.312em;left:0.812em}
+  .ts-clouds{position:absolute;bottom:-0.625em;left:0.312em;width:1.25em;height:1.25em;
+    border-radius:var(--container-radius);background-color:var(--clouds-color);
+    box-shadow:0.937em 0.312em var(--clouds-color),-0.312em -0.312em var(--back-clouds-color),
+      1.437em 0.375em var(--clouds-color),0.5em -0.125em var(--back-clouds-color),
+      2.187em 0 var(--clouds-color),1.25em -0.062em var(--back-clouds-color),
+      2.937em 0.312em var(--clouds-color),2em -0.312em var(--back-clouds-color),
+      3.625em -0.062em var(--clouds-color),2.625em 0 var(--back-clouds-color),
+      4.5em -0.312em var(--clouds-color),3.375em -0.437em var(--back-clouds-color),
+      4.625em -1.75em 0 0.437em var(--clouds-color),4em -0.625em var(--back-clouds-color),
+      4.125em -2.125em 0 0.437em var(--back-clouds-color);
+    transform:translateY(0);transition:transform var(--transition)}
+  .ts-stars{position:absolute;top:-100%;left:0.312em;width:2.75em;height:auto;color:var(--stars-color);
+    transform:translateY(0);transition:transform var(--transition)}
+  .ts-stars svg{display:block;width:100%;height:auto}
+  .ts[data-state="dark"] .ts-c{background-color:var(--container-night-bg)}
+  .ts[data-state="dark"] .ts-circle{transform:translateX(calc(var(--container-width) - var(--circle-container-diameter) - 2 * var(--circle-container-offset)))}
+  .ts[data-state="dark"] .ts-moon{transform:translate(0)}
+  .ts[data-state="dark"] .ts-clouds{transform:translateY(3.437em)}
+  .ts[data-state="dark"] .ts-stars{transform:translateY(calc(var(--container-height) * 1.5 - 50%))}
+  .ts:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+  body.shot{background:transparent}
+  body.shot .page{max-width:880px;padding:0;margin:0}
+  body.shot .card{margin:0;width:880px}
+  body.shot .hero{margin:0;padding:40px 1px 22px;width:880px}
+  body.shot .dock,body.shot .foot{display:none}
+  body.shot .wk-in{border-bottom-color:transparent}
+
+  @media(max-width:760px){
+    .page{padding:38px 16px 120px}
+    .card{padding:24px;border-radius:16px}
+    .org-grid{grid-template-columns:1fr;gap:6px}
+    .flower{order:-1;margin-bottom:10px}
+    .flower img{max-width:172px}
+    .flower figcaption{margin-top:6px}
+    .wordmark{margin-top:4px}
+    .au-head{grid-template-columns:1fr auto}
+    .au-sub{display:none}
+    .hint{max-width:none}
+    .dock{right:14px;bottom:14px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="hero">
+    <div class="hero-top">
+      <div class="eyebrow" data-zh="个人主页" data-en="Profile"></div>
+      <a class="gh" href="https://github.com/masakiyuizzz" target="_blank" rel="noopener">@masakiyuizzz ↗</a>
+    </div>
+    <h1>masakiyui</h1>
+    <p class="lede" data-zh="自学钢琴第六年。喜欢浪漫主义晚期风格，最中意斯卡利亚宾。"
+       data-en="Six years self-taught at the piano. I have a passion for the late Romantic style, and Scriabin is my favorite."></p>
+  </header>
+
+  <section class="card" data-shot="org">
+    <div class="label"><span>01</span><span data-zh="组织" data-en="Organization"></span></div>
+    <div class="org-grid">
+      <div>
+        <div class="wordmark">Lycoranthe</div>
+        <div class="phon">/laɪkəˈrænθi/ <span class="dim">·</span> n. &amp; v. <span class="dim">·</span> Lycor-is + -anthe</div>
+        <p class="org-def" data-zh="一株开在门槛上的曼珠沙华，以及在那道边界上持续发生的、共同的开花。"
+           data-en="A crimson Lycoris at a threshold — and the ongoing flowering that happens where different worlds meet."></p>
+        <p class="org-ext" data-zh="既是名词也是动词：它描述一种在边界处绽放的协作，而不是一个固定的组织。"
+           data-en="Noun and verb at once: collaboration that blooms at a boundary, rather than a fixed institution."></p>
+        <a class="org-link" href="https://github.com/Lycoranthe" target="_blank" rel="noopener">github.com/Lycoranthe ↗</a>
+      </div>
+      <figure class="flower">
+        <img src="assets/lycoranthe.gif" alt="Lycoranthe — Lycoris radiata">
+        <figcaption>Lycoris radiata</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="card about" data-shot="about">
+    <div class="label"><span>02</span><span data-zh="自我介绍" data-en="About"></span></div>
+    <h2 data-zh="弹琴，代码，偶尔把两件事缝在一起。"
+        data-en="Piano, code, and the occasional seam between them."></h2>
+    <p data-zh="非科班，六年全靠兴趣摸过来。先弹改编曲，后来发现自己在找的其实是十九世纪那套东西——大和弦、八度、一条能哼出来的旋律。"
+       data-en="No conservatory; six years of following whatever I liked. I began with transcriptions, then realised what I was really after was the nineteenth century — big chords, octaves, a tune you can hum."></p>
+    <p data-zh="水平大概 Henle 8。"
+       data-en="The level is roughly Henle 8."></p>   
+    <p data-zh="现在主要弹斯克里亚宾、拉赫玛尼诺夫和李斯特。不喜欢没有旋律的跑动，也不喜欢把速度拉来拉去的自由节奏。"
+       data-en="These days it is mostly Scriabin, Rachmaninoff and Liszt. Little patience for passagework without a melody, or for tempo pulled around for its own sake."></p>
+    <p data-zh="也很想学小提琴，等 2029 年吧。"
+       data-en="I’d also really like to learn the violin—maybe in 2029."></p>
+    <ul class="tags">
+      <li data-zh="钢琴" data-en="Piano"></li>
+      <li data-zh="第六年" data-en="Six years in"></li>
+      <li data-zh="小提琴" data-en="Violin"></li>
+      <li>Henle 8</li>
+      <li>Scriabin</li>
+      <li>Rachmaninoff</li>
+      <li>Liszt</li>
+    </ul>
+  </section>
+
+  <section class="card" data-shot="prog">
+    <div class="label-row">
+      <div class="label"><span>03</span><span data-zh="进度" data-en="Progress"></span></div>
+      <div class="tools">
+        <button id="cycle" type="button" title="换一位">⇄</button>
+        <button id="refresh" type="button" title="重置为文件默认值">↻</button>
+        <button id="export" type="button" title="导出 SVG">↓</button>
+      </div>
+    </div>
+    <div id="authors"></div>
+    <p class="hint" data-zh="点数字直接改，一位小数，失焦保存。⇄ 换一位展开，↻ 从文件重置，↓ 导出当前配色的 SVG。"
+       data-en="Click a number to edit — one decimal, saved on blur. ⇄ cycles the expanded author, ↻ resets to the values in the file, ↓ exports the card as SVG."></p>
+  </section>
+
+  <footer class="foot">
+    <span>masakiyui · 2026</span>
+    <span data-zh="没有框架" data-en="No framework"></span>
+  </footer>
+</div>
+
+<div class="dock">
+  <div class="seg" role="group" aria-label="Language">
+    <button type="button" data-lang="zh" class="on">中</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+  <button class="ts" id="ts" type="button" role="switch" aria-checked="true" aria-label="切换到亮色" data-state="dark">
+    <span class="ts-c" aria-hidden="true">
+      <span class="ts-clouds"></span>
+      <span class="ts-stars"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 144 55" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" fill="currentColor" d="M135.831 3.00688C135.055 3.85027 134.111 4.29946 133 4.35447C134.111 4.40947 135.055 4.85867 135.831 5.71123C136.607 6.55462 136.996 7.56303 136.996 8.72727C136.996 7.95722 137.172 7.25134 137.525 6.59129C137.886 5.93124 138.372 5.39954 138.98 5.00535C139.598 4.60199 140.268 4.39114 141 4.35447C139.88 4.2903 138.936 3.85027 138.16 3.00688C137.384 2.16348 136.996 1.16425 136.996 0C136.996 1.16425 136.607 2.16348 135.831 3.00688ZM31 23.3545C32.1114 23.2995 33.0551 22.8503 33.8313 22.0069C34.6075 21.1635 34.9956 20.1642 34.9956 19C34.9956 20.1642 35.3837 21.1635 36.1599 22.0069C36.9361 22.8503 37.8798 23.2903 39 23.3545C38.2679 23.3911 37.5976 23.602 36.9802 24.0053C36.3716 24.3995 35.8864 24.9312 35.5248 25.5913C35.172 26.2513 34.9956 26.9572 34.9956 27.7273C34.9956 26.563 34.6075 25.5546 33.8313 24.7112C33.0551 23.8587 32.1114 23.4095 31 23.3545ZM0 36.3545C1.11136 36.2995 2.05513 35.8503 2.83131 35.0069C3.6075 34.1635 3.99559 33.1642 3.99559 32C3.99559 33.1642 4.38368 34.1635 5.15987 35.0069C5.93605 35.8503 6.87982 36.2903 8 36.3545C7.26792 36.3911 6.59757 36.602 5.98015 37.0053C5.37155 37.3995 4.88644 37.9312 4.52481 38.5913C4.172 39.2513 3.99559 39.9572 3.99559 40.7273C3.99559 39.563 3.6075 38.5546 2.83131 37.7112C2.05513 36.8587 1.11136 36.4095 0 36.3545ZM56.8313 24.0069C56.0551 24.8503 55.1114 25.2995 54 25.3545C55.1114 25.4095 56.0551 25.8587 56.8313 26.7112C57.6075 27.5546 57.9956 28.563 57.9956 29.7273C57.9956 28.9572 58.172 28.2513 58.5248 27.5913C58.8864 26.9312 59.3716 26.3995 59.9802 26.0053C60.5976 25.602 61.2679 25.3911 62 25.3545C60.8798 25.2903 59.9361 24.8503 59.1599 24.0069C58.3837 23.1635 57.9956 22.1642 57.9956 21C57.9956 22.1642 57.6075 23.1635 56.8313 24.0069ZM81 25.3545C82.1114 25.2995 83.0551 24.8503 83.8313 24.0069C84.6075 23.1635 84.9956 22.1642 84.9956 21C84.9956 22.1642 85.3837 23.1635 86.1599 24.0069C86.9361 24.8503 87.8798 25.2903 89 25.3545C88.2679 25.3911 87.5976 25.602 86.9802 26.0053C86.3716 26.3995 85.8864 26.9312 85.5248 27.5913C85.172 28.2513 84.9956 28.9572 84.9956 29.7273C84.9956 28.563 84.6075 27.5546 83.8313 26.7112C83.0551 25.8587 82.1114 25.4095 81 25.3545ZM136 36.3545C137.111 36.2995 138.055 35.8503 138.831 35.0069C139.607 34.1635 139.996 33.1642 139.996 32C139.996 33.1642 140.384 34.1635 141.16 35.0069C141.936 35.8503 142.88 36.2903 144 36.3545C143.268 36.3911 142.598 36.602 141.98 37.0053C141.372 37.3995 140.886 37.9312 140.525 38.5913C140.172 39.2513 139.996 39.9572 139.996 40.7273C139.996 39.563 139.607 38.5546 138.831 37.7112C138.055 36.8587 137.111 36.4095 136 36.3545ZM101.831 49.0069C101.055 49.8503 100.111 50.2995 99 50.3545C100.111 50.4095 101.055 50.8587 101.831 51.7112C102.607 52.5546 102.996 53.563 102.996 54.7273C102.996 53.9572 103.172 53.2513 103.525 52.5913C103.886 51.9312 104.372 51.3995 104.98 51.0053C105.598 50.602 106.268 50.3911 107 50.3545C105.88 50.2903 104.936 49.8503 104.16 49.0069C103.384 48.1635 102.996 47.1642 102.996 46C102.996 47.1642 102.607 48.1635 101.831 49.0069Z"/></svg></span>
+      <span class="ts-circle"><span class="ts-sm"><span class="ts-moon">
+        <span class="ts-spot"></span><span class="ts-spot"></span><span class="ts-spot"></span>
+      </span></span></span>
+    </span>
+  </button>
+</div>
+
+<script>
+const DATA = [
+  { id:'pianeet', name:'Morishita Yui / Pianeet', works:[
+      { t:'Aoi Tori (蒼い鳥)', p:70.5 }
+  ]},
+  { id:'scriabin', name:'Alexander Scriabin', works:[
+      { g:'Op.1', t:'No.1  Waltz', p:0 },
+      { g:'Op.2', t:'No.1  Étude', p:0 },
+      { g:'Op.2', t:'No.2  Prelude', p:0 },
+      { g:'Op.2', t:'No.3  Impromptu à la mazur', p:0 },
+      { g:'Op.3', t:'No.1  Mazurka', p:0 },
+      { g:'Op.3', t:'No.2  Mazurka', p:0 },
+      { g:'Op.3', t:'No.3  Mazurka', p:0 },
+      { g:'Op.3', t:'No.4  Mazurka', p:0 },
+      { g:'Op.3', t:'No.5  Mazurka', p:0 },
+      { g:'Op.3', t:'No.6  Mazurka', p:0 },
+      { g:'Op.3', t:'No.7  Mazurka', p:0 },
+      { g:'Op.3', t:'No.8  Mazurka', p:0 },
+      { g:'Op.3', t:'No.9  Mazurka', p:0 },
+      { g:'Op.3', t:'No.10  Mazurka', p:0 },
+      { g:'Op.4', t:'No.1  Allegro appassionato', p:0 },
+      { g:'Op.5', t:'No.1  Nocturne', p:0 },
+      { g:'Op.5', t:'No.2  Nocturne', p:0 },
+      { g:'Op.7', t:'No.1  Impromptu à la mazur', p:0 },
+      { g:'Op.7', t:'No.2  Impromptu à la mazur', p:0 },
+      { g:'Op.8', t:'No.1  Étude', p:0 },
+      { g:'Op.8', t:'No.2  Étude', p:0 },
+      { g:'Op.8', t:'No.3  Étude', p:0 },
+      { g:'Op.8', t:'No.4  Étude', p:0 },
+      { g:'Op.8', t:'No.5  Étude', p:0 },
+      { g:'Op.8', t:'No.6  Étude', p:0 },
+      { g:'Op.8', t:'No.7  Étude', p:0 },
+      { g:'Op.8', t:'No.8  Étude', p:0 },
+      { g:'Op.8', t:'No.9  Étude', p:0 },
+      { g:'Op.8', t:'No.10  Étude', p:0 },
+      { g:'Op.8', t:'No.11  Étude', p:0 },
+      { g:'Op.8', t:'No.12  Étude', p:0 },
+      { g:'Op.9', t:'No.1  Prelude (left hand)', p:0 },
+      { g:'Op.9', t:'No.2  Nocturne (left hand)', p:0 },
+      { g:'Op.10', t:'No.1  Impromptu', p:0 },
+      { g:'Op.10', t:'No.2  Impromptu', p:0 },
+      { g:'Op.11', t:'No.1  Prelude', p:0 },
+      { g:'Op.11', t:'No.2  Prelude', p:0 },
+      { g:'Op.11', t:'No.3  Prelude', p:0 },
+      { g:'Op.11', t:'No.4  Prelude', p:0 },
+      { g:'Op.11', t:'No.5  Prelude', p:0 },
+      { g:'Op.11', t:'No.6  Prelude', p:0 },
+      { g:'Op.11', t:'No.7  Prelude', p:0 },
+      { g:'Op.11', t:'No.8  Prelude', p:0 },
+      { g:'Op.11', t:'No.9  Prelude', p:0 },
+      { g:'Op.11', t:'No.10  Prelude', p:0 },
+      { g:'Op.11', t:'No.11  Prelude', p:0 },
+      { g:'Op.11', t:'No.12  Prelude', p:0 },
+      { g:'Op.11', t:'No.13  Prelude', p:0 },
+      { g:'Op.11', t:'No.14  Prelude', p:0 },
+      { g:'Op.11', t:'No.15  Prelude', p:0 },
+      { g:'Op.11', t:'No.16  Prelude', p:0 },
+      { g:'Op.11', t:'No.17  Prelude', p:0 },
+      { g:'Op.11', t:'No.18  Prelude', p:0 },
+      { g:'Op.11', t:'No.19  Prelude', p:0 },
+      { g:'Op.11', t:'No.20  Prelude', p:0 },
+      { g:'Op.11', t:'No.21  Prelude', p:0 },
+      { g:'Op.11', t:'No.22  Prelude', p:0 },
+      { g:'Op.11', t:'No.23  Prelude', p:0 },
+      { g:'Op.11', t:'No.24  Prelude', p:0 }
+  ]},
+  { id:'rach', name:'Sergei Rachmaninoff', works:[
+      { t:'Prelude Op.23 No.5', p:0 }
+  ]},
+  { id:'liszt', name:'Franz Liszt', works:[
+      { t:'Hungarian Rhapsody No.2', p:0 }
+  ]}
+];
+
+const KEY = 'masakiyui-profile-v2';
+let S = { theme:'dark', lang:'zh', open:'pianeet', p:{} };
+try { Object.assign(S, JSON.parse(localStorage.getItem(KEY) || '{}')); } catch(e){}
+
+const authorsEl = document.getElementById('authors');
+const qs = new URLSearchParams(location.search);
+if (qs.get('theme') === 'light' || qs.get('theme') === 'dark') S.theme = qs.get('theme');
+if (qs.get('lang') === 'zh' || qs.get('lang') === 'en') S.lang = qs.get('lang');
+if (qs.get('open')) S.open = qs.get('open');
+
+const fmt = n => (Math.round(n*10) % 10 === 0) ? String(Math.round(n)) : n.toFixed(1);
+const keyOf = (a,i) => a.id + ':' + i;
+const val = (a,i) => {
+  const k = keyOf(a,i);
+  return (k in S.p) ? Number(S.p[k]) : a.works[i].p;
+};
+const agg = a => a.works.reduce((s,_,i)=>s+val(a,i),0) / a.works.length;
+const FORCE_OPEN = qs.get('expand') === 'all';
+const save = () => { try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} };
+
+function workRows(a){
+  const row = (w,i) => '<div class="wk" data-w="'+i+'">'
+      +   '<span class="wk-t">'+w.t+'</span>'
+      +   '<span class="wk-edit"><input class="wk-in" type="text" inputmode="decimal" value="'+fmt(val(a,i))+'" aria-label="'+w.t+'"><span>%</span></span>'
+      + '</div>';
+
+  if (!a.works.some(w => w.g)) return a.works.map(row).join('');
+
+  let out = '', last = null;
+  a.works.forEach((w,i) => {
+    if (w.g !== last) {
+      if (last !== null) out += '</div>';
+      out += '<div class="grp"><div class="wk-g">'+w.g+'</div>';
+      last = w.g;
+    }
+    out += row(w,i);
+  });
+  if (last !== null) out += '</div>';
+  return out;
+}
+
+function render(){
+  authorsEl.innerHTML = DATA.map(a => {
+    const open = FORCE_OPEN || S.open === a.id;
+    const count = S.lang === 'zh'
+      ? a.works.length + ' 首'
+      : a.works.length + (a.works.length === 1 ? ' work' : ' works');
+    return '<article class="au'+(open?' open':'')+'" data-id="'+a.id+'">'
+      + '<button class="au-head" type="button" aria-expanded="'+open+'">'
+      +   '<span class="au-name">'+a.name+'</span>'
+      +   '<span class="au-sub">'+count+'</span>'
+      +   '<span class="au-num">'+fmt(agg(a))+'%</span>'
+      + '</button>'
+      + '<div class="au-bar"><i></i></div>'
+      + '<div class="au-body'+(a.works.length>12?' wide':'')+'">'+workRows(a)+'</div>'
+      + '</article>';
+  }).join('');
+  applyLangText();
+  bind();
+  paint();
+}
+
+function paint(){
+  authorsEl.querySelectorAll('.au').forEach(el => {
+    const a = DATA.find(x => x.id === el.dataset.id);
+    const total = Math.max(0, Math.min(100, agg(a)));
+    el.querySelector('.au-num').textContent = fmt(total) + '%';
+    el.querySelector('.au-bar i').style.width = total + '%';
+  });
+}
+
+function bind(){
+  authorsEl.querySelectorAll('.au-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const id = head.closest('.au').dataset.id;
+      S.open = (S.open === id) ? null : id;
+      save(); render();
+    });
+  });
+  authorsEl.querySelectorAll('.wk-in').forEach(inp => {
+    const au = inp.closest('.au');
+    const a = DATA.find(x => x.id === au.dataset.id);
+    const i = Number(inp.closest('.wk').dataset.w);
+    inp.addEventListener('input', () => {
+      const n = parseFloat(inp.value.replace(/[^\d.]/g, ''));
+      if (!isNaN(n)) {
+        S.p[keyOf(a,i)] = Math.max(0, Math.min(100, n));
+        save();
+        const total = Math.max(0, Math.min(100, agg(a)));
+        au.querySelector('.au-num').textContent = fmt(total) + '%';
+        au.querySelector('.au-bar i').style.width = total + '%';
+      }
+    });
+    inp.addEventListener('blur', () => { inp.value = fmt(val(a,i)); });
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
+  });
+}
+
+function applyLangText(){
+  document.querySelectorAll('[data-zh]').forEach(el => {
+    el.innerHTML = S.lang === 'zh' ? el.dataset.zh : el.dataset.en;
+  });
+  document.documentElement.lang = S.lang === 'zh' ? 'zh-CN' : 'en';
+  document.querySelectorAll('.seg button').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
+}
+
+function setTheme(t){
+  S.theme = t;
+  document.documentElement.dataset.theme = t;
+  const ts = document.getElementById('ts');
+  ts.dataset.state = (t === 'dark') ? 'dark' : 'light';
+  ts.setAttribute('aria-checked', String(t === 'dark'));
+  ts.setAttribute('aria-label', t === 'dark' ? '切换到亮色' : '切换到暗色');
+  save();
+}
+
+const PAL = {
+  dark:  { bg:'#0a0a0b', ink:'#eceae5', muted:'#8b8781', track:'#232326', accent:'#bf483b' },
+  light: { bg:'#f8f6f3', ink:'#191817', muted:'#6d6963', track:'#e4e0d9', accent:'#a63a2e' }
+};
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function buildSVG(theme){
+  const c = PAL[theme] || PAL.dark;
+  const W = 880, pad = 36, rowH = 56, headH = 44;
+  const H = pad * 2 + headH + DATA.length * rowH - 14;
+  let out = '<svg xmlns="http://www.w3.org/2000/svg" width="'+W+'" height="'+H+'" viewBox="0 0 '+W+' '+H+'" role="img">'
+    + '<title>Practice progress - masakiyui</title>'
+    + '<desc>Four composers, average progress of the pieces currently in study.</desc>'
+    + '<rect width="'+W+'" height="'+H+'" rx="18" fill="'+c.bg+'"/>'
+    + '<text x="'+pad+'" y="'+(pad+10)+'" font-family="Menlo,Consolas,monospace" font-size="10" letter-spacing="3.2" fill="'+c.muted+'">PRACTICE PROGRESS</text>'
+    + '<text x="'+(W-pad)+'" y="'+(pad+10)+'" text-anchor="end" font-family="Menlo,Consolas,monospace" font-size="10" letter-spacing="2" fill="'+c.muted+'">masakiyui</text>';
+
+  DATA.forEach((a, idx) => {
+    const y = pad + headH + idx * rowH;
+    const p = Math.max(0, Math.min(100, agg(a)));
+    const num = fmt(p) + '%';
+    out += '<text x="'+pad+'" y="'+(y+4)+'" font-family="Helvetica Neue,Arial,sans-serif" font-size="15" fill="'+c.ink+'">'+esc(a.name)+'</text>';
+    out += '<text x="'+(W-pad)+'" y="'+(y+4)+'" text-anchor="end" font-family="Menlo,Consolas,monospace" font-size="14" fill="'+(p>0?c.accent:c.muted)+'">'+num+'</text>';
+    out += '<rect x="'+pad+'" y="'+(y+18)+'" width="'+(W-pad*2)+'" height="4" rx="2" fill="'+c.track+'"/>';
+    if (p > 0) out += '<rect x="'+pad+'" y="'+(y+18)+'" width="'+((W-pad*2)*p/100).toFixed(1)+'" height="4" rx="2" fill="'+c.accent+'"/>';
+  });
+
+  out += '</svg>';
+  return out;
+}
+
+document.getElementById('export').addEventListener('click', () => {
+  const svg = buildSVG(S.theme);
+  const blob = new Blob([svg], { type:'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'progress-' + S.theme + '.svg';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+});
+
+const holder = document.createElement('div');
+holder.id = 'svgout';
+holder.style.display = 'none';
+holder.innerHTML = buildSVG('dark') + '<!--SPLIT-->' + buildSVG('light');
+document.body.appendChild(holder);
+
+document.getElementById('ts').addEventListener('click', () => setTheme(S.theme === 'dark' ? 'light' : 'dark'));
+
+document.querySelectorAll('.seg button').forEach(b => {
+  b.addEventListener('click', () => {
+    S.lang = b.dataset.lang; save();
+    applyLangText();
+    render();
+  });
+});
+
+document.getElementById('cycle').addEventListener('click', () => {
+  const i = DATA.findIndex(a => a.id === S.open);
+  S.open = DATA[(i + 1) % DATA.length].id;
+  save(); render();
+});
+
+document.getElementById('refresh').addEventListener('click', () => {
+  if (!confirm('重置为 index.html 里的默认值？浏览器里改过的数字会丢。')) return;
+  S.p = {};
+  save(); render();
+});
+
+setTheme(S.theme);
+render();
+
+/* ---------- 截图模式 ---------- */
+const shot = qs.get('shot');
+if (shot) {
+  document.body.classList.add('shot');
+  ['org','about','prog'].forEach(k => {
+    const el = document.querySelector('[data-shot="'+k+'"]');
+    if (el && k !== shot) el.style.display = 'none';
+  });
+  if (shot !== 'hero') document.querySelector('.hero').style.display = 'none';
+  if (shot === 'prog') {
+    const card = document.querySelector('[data-shot="prog"]');
+    card.querySelector('.tools').style.display = 'none';
+    card.querySelector('.hint').style.display = 'none';
+  }
+  const target = shot === 'hero' ? document.querySelector('.hero')
+                                 : document.querySelector('[data-shot="'+shot+'"]');
+  const setH = () => { document.title = String(Math.ceil(target.getBoundingClientRect().height)); };
+  setH(); setTimeout(setH, 120); setTimeout(setH, 400);
+}
+
+</script>
+</body>
+</html>
