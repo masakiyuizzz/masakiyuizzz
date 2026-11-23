@@ -34,5 +34,12 @@ for th in dark light; do
   echo "  card-hero-$th.png  ${H}px"
 done
 
-python3 tools/trim.py profile/card-org-*.png profile/card-about-*.png profile/card-prog-*.png
+for th in dark light; do
+  H=$(measure dock $th)
+  shot dock "profile/card-dock-$th.png" $((H + 12)) $th
+  echo "  card-dock-$th.png  ${H}px"
+done
+
+python3 tools/trim.py profile/card-org-*.png profile/card-about-*.png \
+  profile/card-prog-*.png profile/card-dock-*.png
 echo "导出完成"

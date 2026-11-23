@@ -180,6 +180,10 @@
   body.shot .hero{margin:0;padding:40px 1px 22px;width:880px}
   body.shot .dock,body.shot .foot{display:none}
   body.shot .wk-in{border-bottom-color:transparent}
+  body.dockonly{background:transparent;width:260px}
+  body.dockonly .page{display:none}
+  body.dockonly .dock{position:static;padding:7px 9px;justify-content:flex-end;
+    background:var(--bg);border:1px solid var(--line);border-radius:999px;width:max-content}
 
   @media(max-width:760px){
     .page{padding:38px 16px 120px}
@@ -552,7 +556,11 @@ render();
 
 /* ---------- 截图模式 ---------- */
 const shot = qs.get('shot');
-if (shot) {
+if (shot === 'dock') {
+  document.body.classList.add('dockonly');
+  const d = document.querySelector('.dock');
+  document.title = String(Math.ceil(d.getBoundingClientRect().height));
+} else if (shot) {
   document.body.classList.add('shot');
   ['org','about','prog'].forEach(k => {
     const el = document.querySelector('[data-shot="'+k+'"]');

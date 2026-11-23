@@ -1,3 +1,5 @@
+<p align="right"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-dock-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-dock-light.png" width="188" alt="language and theme controls (decorative)" /></picture></p>
+
 <p align="center"><a href="https://github.com/masakiyuizzz"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-hero-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-hero-light.png" width="100%" alt="masakiyui — profile" /></picture></a></p>
 
 <p align="center"><a href="https://github.com/masakiyuizzz/Lycoranthe"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-org-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/card-org-light.png" width="100%" alt="Lycoranthe — a crimson Lycoris at a threshold" /></picture></a></p>
