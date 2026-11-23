@@ -182,8 +182,10 @@
   body.shot .wk-in{border-bottom-color:transparent}
   body.dockonly{background:transparent;width:260px}
   body.dockonly .page{display:none}
-  body.dockonly .dock{position:static;padding:7px 9px;justify-content:flex-end;
+  body.dockonly .dock{position:static;padding:7px 9px;justify-content:flex-end;height:49px;
     background:var(--bg);border:1px solid var(--line);border-radius:999px;width:max-content}
+  body.tsonly .seg{display:none}
+  body.langonly .ts{display:none}
 
   @media(max-width:760px){
     .page{padding:38px 16px 120px}
@@ -556,8 +558,10 @@ render();
 
 /* ---------- 截图模式 ---------- */
 const shot = qs.get('shot');
-if (shot === 'dock') {
+if (shot === 'dock' || shot === 'ts' || shot === 'lang') {
   document.body.classList.add('dockonly');
+  if (shot === 'ts') document.body.classList.add('tsonly');
+  if (shot === 'lang') document.body.classList.add('langonly');
   const d = document.querySelector('.dock');
   document.title = String(Math.ceil(d.getBoundingClientRect().height));
 } else if (shot) {

@@ -1,0 +1,11 @@
+<p align="right"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/ts-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/ts-light.png" width="100%" alt="theme toggle (follows your system)" /></picture>&nbsp;&nbsp;<a href="https://github.com/masakiyuizzz/masakiyuizzz/blob/main/README.md"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/lang-en-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/lang-en-light.png" width="99" alt="中文" /></picture></a></p>
+
+<p align="center"><a href="https://github.com/masakiyuizzz"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/hero-en-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/hero-en-light.png" width="100%" alt="masakiyui" /></picture></a></p>
+
+<p align="center"><a href="https://github.com/masakiyuizzz/Lycoranthe"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/org-en-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/org-en-light.png" width="100%" alt="Lycoranthe" /></picture></a></p>
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/about-en-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/about-en-light.png" width="100%" alt="About" /></picture></p>
+
+<p align="center"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/prog-en-dark.png" /><img src="https://raw.githubusercontent.com/masakiyuizzz/masakiyuizzz/main/profile/prog-en-light.png" width="100%" alt="Practice progress" /></picture></p>
+
+<p align="center"><sub>Piano · <a href="https://github.com/masakiyuizzz/Lycoranthe">Lycoranthe</a> · <a href="https://github.com/masakiyuizzz">@masakiyuizzz</a> · 2026</sub></p>
