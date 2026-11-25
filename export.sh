@@ -39,4 +39,7 @@ for th in dark light; do
 done
 
 python3 tools/trim.py profile/*.png
+
+# 给 README 里的图片地址打版本号，绕开 GitHub / 浏览器的图片缓存
+python3 tools/bump.py
 echo "导出完成"
